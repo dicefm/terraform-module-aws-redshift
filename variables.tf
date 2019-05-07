@@ -100,12 +100,14 @@ variable "enable_logging" {
 
 variable "logging_bucket_name" {
   description = "(Optional, required when enable_logging is true) The name of an existing S3 bucket where the log files are to be stored. Must be in the same region as the cluster and the cluster must have read bucket and put object permissions."
-  default     = false
+  type        = "string"
+  default     = "false"
 }
 
 variable "logging_s3_key_prefix" {
   description = "(Optional) The prefix applied to the log file names."
-  default     = false
+  type        = "string"
+  default     = "false"
 }
 
 # parameter group config bits
