@@ -23,10 +23,10 @@ module "sg" {
   source = "terraform-aws-modules/security-group/aws//modules/redshift"
 
   name   = "demo-redshift"
-  vpc_id = "${module.vpc.vpc_id}"
+  vpc_id = module.vpc.vpc_id
 
   # Allow ingress rules to be accessed only within current VPC
-  ingress_cidr_blocks = ["${module.vpc.vpc_cidr_block}"]
+  ingress_cidr_blocks = [module.vpc.vpc_cidr_block]
 
   # Allow all rules for all protocols
   egress_rules = ["all-all"]
@@ -46,6 +46,6 @@ module "redshift" {
   cluster_master_username = "mydbuser"
   cluster_master_password = "MySecretPassw0rd"
 
-  subnets                = ["${module.vpc.redshift_subnets}"]
-  vpc_security_group_ids = ["${module.sg.this_security_group_id}"]
+  subnets                = [module.vpc.redshift_subnets]
+  vpc_security_group_ids = [module.sg.this_security_group_id]
 }
