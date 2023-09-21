@@ -7,7 +7,7 @@ locals {
 }
 
 provider "aws" {
-  region = local.region
+  region = var.region
 }
 
 resource "aws_redshift_cluster" "this" {
