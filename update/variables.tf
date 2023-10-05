@@ -59,3 +59,7 @@ variable "private_subnets" {
 variable "skip_final_snapshot"{
   description = "(Optional) Determines whether a final snapshot of the cluster is created before Amazon Redshift deletes the cluster. If true , a final cluster snapshot is not created. If false , a final cluster snapshot is created before the cluster is deleted. Default is false."
 }
+
+variable "snapshot_identifier"{
+  description = "(Optional) The name of the snapshot from which to create the new cluster."
+}

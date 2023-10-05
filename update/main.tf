@@ -40,6 +40,7 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   vpc_security_group_ids    = [ var.security_group ]
   cluster_subnet_group_name = aws_redshift_subnet_group.subnet_group.name
   skip_final_snapshot       = var.skip_final_snapshot
+  snapshot_identifier       = var.snapshot_identifier
 }
 
 resource "aws_redshift_subnet_group" "subnet_group" {
