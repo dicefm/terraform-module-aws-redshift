@@ -63,3 +63,31 @@ variable "skip_final_snapshot"{
 variable "snapshot_identifier"{
   description = "(Optional) The name of the snapshot from which to create the new cluster."
 }
+
+variable "preferred_maintenance_window"{
+  description = "(Optional) The weekly time range (in UTC) during which automated cluster maintenance can occur. Format: ddd:hh24:mi-ddd:hh24:mi."
+}
+
+ variable "availability_zone_relocation_enabled" {
+   description = "Optional) If true, the cluster can be relocated to another availabity zone, either automatically by AWS or when requested. Default is false. Available for use on clusters from the RA3 instance family."
+ }
+
+variable "automated_snapshot_retention_period"{
+  description = "(Optional) The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with create-cluster-snapshot. Default is 1."
+}
+
+variable "availability_zone"{
+  description = "(Optional) The EC2 Availability Zone (AZ) in which you want Amazon Redshift to provision the cluster. For example, if you have several EC2 instances running in a specific Availability Zone, then you might want the cluster to be provisioned in the same zone in order to decrease network latency. Can only be changed if availability_zone_relocation_enabled is true."
+}
+
+# variable "iam_roles" {
+#   description = "(Optional) A list of IAM Role ARNs to associate with the cluster. A Maximum of 10 can be associated to the cluster at any time."
+# }
+
+# variable "cluster_parameter_group_name"{
+#   description = "The name of the parameter group to be associated with this cluster"
+# }
+
+ variable "publicly_accessible"{
+   description = "(Optional) If true, the cluster can be accessed from a public network. Default is true"
+ }
