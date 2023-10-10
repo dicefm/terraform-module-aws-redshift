@@ -15,6 +15,8 @@ terraform {
 }
 
 
+
+
 # ###
 # random pass generator
 # ###
@@ -40,13 +42,16 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   vpc_security_group_ids               = [ var.security_group ]
   cluster_subnet_group_name            = aws_redshift_subnet_group.subnet_group.name
   skip_final_snapshot                  = var.skip_final_snapshot
-  snapshot_identifier                  = var.snapshot_identifier
+  #snapshot_identifier                  = var.snapshot_identifier
   preferred_maintenance_window         = var.preferred_maintenance_window
   #availability_zone                    = var.availability_zone
-  availability_zone_relocation_enabled  = var.availability_zone_relocation_enabled 
+  #availability_zone_relocation_enabled = var.availability_zone_relocation_enabled
   automated_snapshot_retention_period  = var.automated_snapshot_retention_period
   #cluster_parameter_group_name         = var.cluster_parameter_group_name
-  publicly_accessible                   = var.publicly_accessible 
+  publicly_accessible                  = var.publicly_accessible
+  iam_roles                            = var.iam_roles
+  #default_iam_role_arn                 = var.default_iam_role_arn
+  #apply_immediately                     = var.apply_immediately
 }
 
 resource "aws_redshift_subnet_group" "subnet_group" {
