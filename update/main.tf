@@ -24,6 +24,10 @@ resource "random_password" "password" {
   length           = 16
   special          = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
+  min_lower        = 1
+  min_numeric      = 1
+  min_special      = 1
+  min_upper        = 1
 }
 
 
@@ -34,8 +38,8 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   cluster_identifier                   = var.cluster_identifier
   node_type                            = var.node_type
   number_of_nodes                      = var.number_of_nodes
-  master_username                      = var.master_username
-  master_password                      = random_password.password.result
+  #master_username                      = var.master_username
+  #master_password                      = random_password.password.result
   database_name                        = var.database_name
   port                                 = var.port
   allow_version_upgrade                = var.allow_version_upgrade
@@ -48,6 +52,7 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   publicly_accessible                  = var.publicly_accessible
   iam_roles                            = var.iam_roles
   final_snapshot_identifier            = var.final_snapshot_identifier
+  owner_account                        = var.owner_account
 
   # TODO Baked into terragrunt, should live in `terraformpds` to be dynamic
   cluster_parameter_group_name         = aws_redshift_parameter_group.default-redshift-parameter-group.name
@@ -58,11 +63,11 @@ resource "aws_redshift_cluster" "redshift_cluster" {
 }
 
 resource "aws_redshift_subnet_group" "subnet_group" {
-  name       = "test"
+  name       = "redshift-subnet-group"
   subnet_ids = var.private_subnets
 
   tags = {
-    Name = format("%s Subnet Group","test")
+    Name = format("%s Subnet Group","redshift-subnet-group")
   }
 }
 
