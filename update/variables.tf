@@ -46,10 +46,10 @@ variable "security_group" {
   type        = string
 }
 
-variable "name" {
-  description = "Name of subnet group"
-  type        = string
-}
+# variable "name" {
+#   description = "Name of subnet group"
+#   type        = string
+# }
 
 variable "private_subnets" {
   description = "List of IDs of the subnet"
@@ -60,9 +60,9 @@ variable "skip_final_snapshot"{
   description = "(Optional) Determines whether a final snapshot of the cluster is created before Amazon Redshift deletes the cluster. If true , a final cluster snapshot is not created. If false , a final cluster snapshot is created before the cluster is deleted. Default is false."
 }
 
-# variable "snapshot_identifier"{
-#   description = "(Optional) The name of the snapshot from which to create the new cluster."
-# }
+variable "snapshot_identifier"{
+  description = "(Optional) The name of the snapshot from which to create the new cluster."
+}
 
 variable "preferred_maintenance_window"{
   description = "(Optional) The weekly time range (in UTC) during which automated cluster maintenance can occur. Format: ddd:hh24:mi-ddd:hh24:mi."
@@ -82,8 +82,8 @@ variable "automated_snapshot_retention_period"{
 # }
 
 variable "iam_roles" {
-    type        = list(string)
   description = "(Optional) A list of IAM Role ARNs to associate with the cluster. A Maximum of 10 can be associated to the cluster at any time."
+  type        = list(string)
 }
 
 # variable "cluster_parameter_group_name"{
@@ -97,3 +97,19 @@ variable "iam_roles" {
 #  variable "apply_immediately"{
 #   description = "(Optional) Specifies whether any cluster modifications are applied immediately, or during the next maintenance window. Default is false."
 #  }
+
+# variable "parameter_group_name"{
+#   description = "(Required) The name of the Redshift parameter group."
+# }
+
+#  variable "subnet_group_name"{
+#    description = "The name of a cluster subnet group to be associated with this cluster"
+#  }
+
+# variable "cluster_parameter_group_name"{
+#   description = "The name of the parameter group to be associated with this cluster"
+# }
+
+# variable "cluster_subnet_group_name" {
+#   description = "(Optional) The name of a cluster subnet group to be associated with this cluster. If this parameter is not provided the resulting cluster will be deployed outside virtual private cloud (VPC)."
+# }
