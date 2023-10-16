@@ -44,19 +44,16 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   skip_final_snapshot                  = var.skip_final_snapshot
   snapshot_identifier                  = var.snapshot_identifier
   preferred_maintenance_window         = var.preferred_maintenance_window
-  #availability_zone                    = var.availability_zone
-  #availability_zone_relocation_enabled = var.availability_zone_relocation_enabled
   automated_snapshot_retention_period  = var.automated_snapshot_retention_period
-  #cluster_parameter_group_name         = var.cluster_parameter_group_name
   publicly_accessible                  = var.publicly_accessible
   iam_roles                            = var.iam_roles
+
+  # TODO Baked into terragrunt, should live in `terraformpds` to be dynamic
+  cluster_parameter_group_name         = aws_redshift_parameter_group.default-redshift-parameter-group.name
+  
+  # Can't do in version 3.31.0
   #apply_immediately                     = var.apply_immediately
-
-  #cluster_subnet_group_name            = var.cluster_subnet_group_name
-  #cluster_subnet_group_name            = aws_redshift_subnet_group.subnet_group.name
-
-  #cluster_parameter_group_name         = var.cluster_parameter_group_name
-  cluster_parameter_group_name         = aws_redshift_parameter_group.bar.name
+  #availability_zone_relocation_enabled = var.availability_zone_relocation_enabled
 }
 
 resource "aws_redshift_subnet_group" "subnet_group" {
@@ -70,8 +67,8 @@ resource "aws_redshift_subnet_group" "subnet_group" {
 
 
 
-resource "aws_redshift_parameter_group" "bar" {
-  name   = "test"
+resource "aws_redshift_parameter_group" "default-redshift-parameter-group" {
+  name   = "default-redshift-parameter-group"
   family = "redshift-1.0"
 
   parameter {
