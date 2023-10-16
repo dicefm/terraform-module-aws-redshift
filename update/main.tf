@@ -47,6 +47,7 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   automated_snapshot_retention_period  = var.automated_snapshot_retention_period
   publicly_accessible                  = var.publicly_accessible
   iam_roles                            = var.iam_roles
+  final_snapshot_identifier            = var.final_snapshot_identifier
 
   # TODO Baked into terragrunt, should live in `terraformpds` to be dynamic
   cluster_parameter_group_name         = aws_redshift_parameter_group.default-redshift-parameter-group.name

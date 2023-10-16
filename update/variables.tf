@@ -46,11 +46,6 @@ variable "security_group" {
   type        = string
 }
 
-# variable "name" {
-#   description = "Name of subnet group"
-#   type        = string
-# }
-
 variable "private_subnets" {
   description = "List of IDs of the subnet"
   type        = list(string)
@@ -58,6 +53,7 @@ variable "private_subnets" {
 
 variable "skip_final_snapshot"{
   description = "(Optional) Determines whether a final snapshot of the cluster is created before Amazon Redshift deletes the cluster. If true , a final cluster snapshot is not created. If false , a final cluster snapshot is created before the cluster is deleted. Default is false."
+  default = false
 }
 
 variable "snapshot_identifier"{
@@ -68,48 +64,21 @@ variable "preferred_maintenance_window"{
   description = "(Optional) The weekly time range (in UTC) during which automated cluster maintenance can occur. Format: ddd:hh24:mi-ddd:hh24:mi."
 }
 
-#  variable "availability_zone_relocation_enabled" {
-#    description = "Optional) If true, the cluster can be relocated to another availabity zone, either automatically by AWS or when requested. Default is false. Available for use on clusters from the RA3 instance family."
-#      type        = bool
-#  }
-
 variable "automated_snapshot_retention_period"{
   description = "(Optional) The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with create-cluster-snapshot. Default is 1."
 }
 
-# variable "availability_zone"{
-#   description = "(Optional) The EC2 Availability Zone (AZ) in which you want Amazon Redshift to provision the cluster. For example, if you have several EC2 instances running in a specific Availability Zone, then you might want the cluster to be provisioned in the same zone in order to decrease network latency. Can only be changed if availability_zone_relocation_enabled is true."
-# }
 
 variable "iam_roles" {
   description = "(Optional) A list of IAM Role ARNs to associate with the cluster. A Maximum of 10 can be associated to the cluster at any time."
   type        = list(string)
 }
 
-# variable "cluster_parameter_group_name"{
-#   description = "The name of the parameter group to be associated with this cluster"
-# }
-
  variable "publicly_accessible"{
    description = "(Optional) If true, the cluster can be accessed from a public network. Default is true"
  }
 
-#  variable "apply_immediately"{
-#   description = "(Optional) Specifies whether any cluster modifications are applied immediately, or during the next maintenance window. Default is false."
-#  }
 
-# variable "parameter_group_name"{
-#   description = "(Required) The name of the Redshift parameter group."
-# }
-
-#  variable "subnet_group_name"{
-#    description = "The name of a cluster subnet group to be associated with this cluster"
-#  }
-
-# variable "cluster_parameter_group_name"{
-#   description = "The name of the parameter group to be associated with this cluster"
-# }
-
-# variable "cluster_subnet_group_name" {
-#   description = "(Optional) The name of a cluster subnet group to be associated with this cluster. If this parameter is not provided the resulting cluster will be deployed outside virtual private cloud (VPC)."
-# }
+ variable "final_snapshot_identifier"{
+   description = "(Optional) The name of your final DB snapshot when this DB instance is deleted. Must be provided if skip_final_snapshot is set to false. The value must begin with a letter, only contain alphanumeric characters and hyphens, and not end with a hyphen or contain two consecutive hyphens. Must not be provided when deleting a read replica."
+ }
