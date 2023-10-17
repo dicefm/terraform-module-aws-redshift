@@ -86,3 +86,11 @@ variable "iam_roles" {
   variable "owner_account"{
    description = "(Optional) The AWS customer account used to create or copy the snapshot. Required if you are restoring a snapshot you do not own, optional if you own the snapshot."
  }
+
+   variable "kms_key_id"{
+   description = " (Optional) The ARN for the KMS encryption key. When specifying kms_key_id, encrypted needs to be set to true."
+ }
+
+    variable  "encrypted"{
+   description = "(Optional) If true , the data in the cluster is encrypted at rest."
+ }
