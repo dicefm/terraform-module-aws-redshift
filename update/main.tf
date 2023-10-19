@@ -53,6 +53,8 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   iam_roles                            = var.iam_roles
   final_snapshot_identifier            = var.final_snapshot_identifier
   owner_account                        = var.owner_account
+  kms_key_id                           = var.kms_key_id
+  encrypted                            = var.encrypted
 
   # TODO Baked into terragrunt, should live in `terraformpds` to be dynamic
   cluster_parameter_group_name         = aws_redshift_parameter_group.default-redshift-parameter-group.name
