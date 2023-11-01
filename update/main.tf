@@ -38,13 +38,14 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   cluster_identifier                   = var.cluster_identifier
   node_type                            = var.node_type
   number_of_nodes                      = var.number_of_nodes
-  #master_username                      = var.master_username
-  #master_password                      = random_password.password.result
+  master_username                      = var.master_username
+  master_password                      = random_password.password.result
   database_name                        = var.database_name
   port                                 = var.port
   allow_version_upgrade                = var.allow_version_upgrade
   vpc_security_group_ids               = [ var.security_group ]
-  cluster_subnet_group_name            = aws_redshift_subnet_group.subnet_group.name
+  #cluster_subnet_group_name            = aws_redshift_subnet_group.subnet_group.name 
+  cluster_subnet_group_name            = var.cluster_subnet_group_name
   skip_final_snapshot                  = var.skip_final_snapshot
   snapshot_identifier                  = var.snapshot_identifier
   preferred_maintenance_window         = var.preferred_maintenance_window
@@ -57,46 +58,62 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   encrypted                            = var.encrypted
 
   # TODO Baked into terragrunt, should live in `terraformpds` to be dynamic
-  cluster_parameter_group_name         = aws_redshift_parameter_group.default-redshift-parameter-group.name
-  
+  #cluster_parameter_group_name         = aws_redshift_parameter_group.default-redshift-parameter-group.name
+  cluster_parameter_group_name         = var.cluster_parameter_group_name
+  #cluster_parameter_group_name         = "comesfrommodule"
   # Can't do in version 3.31.0
   #apply_immediately                     = var.apply_immediately
   #availability_zone_relocation_enabled = var.availability_zone_relocation_enabled
+
+   #dependency added so cluster will delete 
+   depends_on = [
+    aws_redshift_subnet_group.subnet_group,
+    aws_redshift_parameter_group.default-redshift-parameter-group
+                ]
 }
 
 resource "aws_redshift_subnet_group" "subnet_group" {
-  name       = "redshift-subnet-group"
+  name       = var.cluster_subnet_group_name
+  #name       = "${aws_redshift_subnet_group.subnet_group.name}"
   subnet_ids = var.private_subnets
-
-  tags = {
-    Name = format("%s Subnet Group","redshift-subnet-group")
-  }
 }
 
 
 
 resource "aws_redshift_parameter_group" "default-redshift-parameter-group" {
-  name   = "default-redshift-parameter-group"
+  #name   = "default-redshift-parameter-group"
+  name       = var.cluster_parameter_group_name
   family = "redshift-1.0"
 
-  parameter {
-    name  = "require_ssl"
-    value = "true"
+  dynamic "parameter" {
+    for_each = var.custom_parameters
+
+    content {
+      #apply_method = parameter.value.apply_method
+      name         = parameter.value.name
+      value        = parameter.value.value
+    }
+
   }
 
-  parameter {
-    name  = "query_group"
-    value = "example"
-  }
+  # parameter {
+  #   name  = "require_ssl"
+  #   value = "true"
+  # }
 
-  parameter {
-    name  = "enable_user_activity_logging"
-    value = "true"
-  }
+  # parameter {
+  #   name  = "query_group"
+  #   value = "example"
+  # }
 
-  parameter {
-    name  = "wlm_json_configuration"
-    value = jsonencode(jsondecode(file("./wlm.json")))
-  }
+  # parameter {
+  #   name  = "enable_user_activity_logging"
+  #   value = "true"
+  # }
+
+  # parameter {
+  #   name  = "wlm_json_configuration"
+  #   value = jsonencode(jsondecode(file("./wlm.json")))
+  # }
 
 }

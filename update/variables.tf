@@ -94,3 +94,17 @@ variable "iam_roles" {
     variable  "encrypted"{
    description = "(Optional) If true , the data in the cluster is encrypted at rest."
  }
+
+    variable  "cluster_parameter_group_name"{
+   description = "(Optional) The name of the parameter group to be associated with this cluster."
+ }
+
+     variable  "cluster_subnet_group_name"{
+   description = "The name of a cluster subnet group to be associated with this cluster"
+ }
+
+ variable "custom_parameters" {
+  description = "A list of parameter maps to apply"
+  type        = list(map(string))
+  default     = []
+}
