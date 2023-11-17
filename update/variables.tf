@@ -68,7 +68,6 @@ variable "automated_snapshot_retention_period"{
   description = "(Optional) The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with create-cluster-snapshot. Default is 1."
 }
 
-
 variable "iam_roles" {
   description = "(Optional) A list of IAM Role ARNs to associate with the cluster. A Maximum of 10 can be associated to the cluster at any time."
   type        = list(string)
@@ -77,7 +76,6 @@ variable "iam_roles" {
  variable "publicly_accessible"{
    description = "(Optional) If true, the cluster can be accessed from a public network. Default is true"
  }
-
 
  variable "final_snapshot_identifier"{
    description = "(Optional) The name of your final DB snapshot when this DB instance is deleted. Must be provided if skip_final_snapshot is set to false. The value must begin with a letter, only contain alphanumeric characters and hyphens, and not end with a hyphen or contain two consecutive hyphens. Must not be provided when deleting a read replica."
