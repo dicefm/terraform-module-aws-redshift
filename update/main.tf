@@ -14,9 +14,6 @@ terraform {
   backend "s3" {}
 }
 
-
-
-
 # ###
 # random pass generator
 # ###
@@ -44,7 +41,6 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   port                                 = var.port
   allow_version_upgrade                = var.allow_version_upgrade
   vpc_security_group_ids               = [ var.security_group ]
-  #cluster_subnet_group_name            = aws_redshift_subnet_group.subnet_group.name 
   cluster_subnet_group_name            = var.cluster_subnet_group_name
   skip_final_snapshot                  = var.skip_final_snapshot
   snapshot_identifier                  = var.snapshot_identifier
@@ -56,16 +52,13 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   owner_account                        = var.owner_account
   kms_key_id                           = var.kms_key_id
   encrypted                            = var.encrypted
-
-  # TODO Baked into terragrunt, should live in `terraformpds` to be dynamic
-  #cluster_parameter_group_name         = aws_redshift_parameter_group.default-redshift-parameter-group.name
   cluster_parameter_group_name         = var.cluster_parameter_group_name
-  #cluster_parameter_group_name         = "comesfrommodule"
+  
   # Can't do in version 3.31.0
   #apply_immediately                     = var.apply_immediately
   #availability_zone_relocation_enabled = var.availability_zone_relocation_enabled
 
-   #dependency added so cluster will delete 
+   #dependency added so cluster will delete correctly
    depends_on = [
     aws_redshift_subnet_group.subnet_group,
     aws_redshift_parameter_group.default-redshift-parameter-group
@@ -81,7 +74,6 @@ resource "aws_redshift_subnet_group" "subnet_group" {
 
 
 resource "aws_redshift_parameter_group" "default-redshift-parameter-group" {
-  #name   = "default-redshift-parameter-group"
   name       = var.cluster_parameter_group_name
   family = "redshift-1.0"
 
@@ -89,31 +81,10 @@ resource "aws_redshift_parameter_group" "default-redshift-parameter-group" {
     for_each = var.custom_parameters
 
     content {
-      #apply_method = parameter.value.apply_method
       name         = parameter.value.name
       value        = parameter.value.value
     }
 
   }
-
-  # parameter {
-  #   name  = "require_ssl"
-  #   value = "true"
-  # }
-
-  # parameter {
-  #   name  = "query_group"
-  #   value = "example"
-  # }
-
-  # parameter {
-  #   name  = "enable_user_activity_logging"
-  #   value = "true"
-  # }
-
-  # parameter {
-  #   name  = "wlm_json_configuration"
-  #   value = jsonencode(jsondecode(file("./wlm.json")))
-  # }
 
 }
