@@ -85,24 +85,28 @@ variable "iam_roles" {
    description = "(Optional) The AWS customer account used to create or copy the snapshot. Required if you are restoring a snapshot you do not own, optional if you own the snapshot."
  }
 
-   variable "kms_key_id"{
+  variable "kms_key_id"{
    description = " (Optional) The ARN for the KMS encryption key. When specifying kms_key_id, encrypted needs to be set to true."
  }
 
-    variable  "encrypted"{
+  variable  "encrypted"{
    description = "(Optional) If true , the data in the cluster is encrypted at rest."
  }
 
-    variable  "cluster_parameter_group_name"{
+  variable  "cluster_parameter_group_name"{
    description = "(Optional) The name of the parameter group to be associated with this cluster."
  }
 
-     variable  "cluster_subnet_group_name"{
+  variable  "cluster_subnet_group_name"{
    description = "The name of a cluster subnet group to be associated with this cluster"
  }
 
- variable "custom_parameters" {
+  variable "custom_parameters" {
   description = "A list of parameter maps to apply"
   type        = list(map(string))
   default     = []
 }
+
+  variable  "maintenance_track_name"{
+   description = "(Optional) The name of the maintenance track for the restored cluster. When you take a snapshot, the snapshot inherits the MaintenanceTrack value from the cluster. The snapshot might be on a different track than the cluster that was the source for the snapshot. For example, suppose that you take a snapshot of a cluster that is on the current track and then change the cluster to be on the trailing track. In this case, the snapshot and the source cluster are on different tracks. Default value is current."
+ }

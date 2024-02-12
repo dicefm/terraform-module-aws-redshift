@@ -53,6 +53,7 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   kms_key_id                           = var.kms_key_id
   encrypted                            = var.encrypted
   cluster_parameter_group_name         = var.cluster_parameter_group_name
+  maintenance_track_name               = var.maintenance_track_name
   
   # Can't do in version 3.31.0
   #apply_immediately                     = var.apply_immediately
