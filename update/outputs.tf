@@ -11,4 +11,5 @@ output "redshift_cluster_endpoint" {
 output "redshift_master_password" {
   description = "db master pass"
   value       = aws_redshift_cluster.redshift_cluster.master_password
+  sensitive   = true
 }
