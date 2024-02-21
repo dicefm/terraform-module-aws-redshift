@@ -106,3 +106,8 @@ variable "iam_roles" {
   type        = list(map(string))
   default     = []
 }
+
+variable "tags" {
+  description = "A mapping of tags to assign to all resources"
+  default     = {}
+}

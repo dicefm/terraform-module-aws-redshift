@@ -63,6 +63,7 @@ resource "aws_redshift_cluster" "redshift_cluster" {
     aws_redshift_subnet_group.subnet_group,
     aws_redshift_parameter_group.default-redshift-parameter-group
                 ]
+  tags = "${merge(var.tags, tomap({"Name": "${var.cluster_identifier}"}))}"
 }
 
 resource "aws_redshift_subnet_group" "subnet_group" {
