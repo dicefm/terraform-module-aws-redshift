@@ -62,9 +62,10 @@ resource "aws_redshift_parameter_group" "this" {
   name   = "${var.cluster_identifier}-${replace(var.cluster_parameter_group, ".", "-")}-custom-params"
   family = var.cluster_parameter_group
 
+  # ref: https://github.com/hashicorp/terraform-provider-aws/issues/7865#issuecomment-1246092780
   parameter {
     name  = "wlm_json_configuration"
-    value = var.wlm_json_configuration
+    value = "${replace(var.wlm_json_configuration, "/[\\n\\t ]+/", "")}"
   }
 
   parameter {
