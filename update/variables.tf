@@ -108,6 +108,7 @@ variable "iam_roles" {
 }
 
 variable "tags" {
-  description = "A mapping of tags to assign to all resources"
+  description = "A mapping of tags to assign to the bucket."
+  type        = map(string)
   default     = {}
 }
