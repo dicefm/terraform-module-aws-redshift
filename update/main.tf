@@ -89,3 +89,15 @@ resource "aws_redshift_parameter_group" "default-redshift-parameter-group" {
   }
 
 }
+
+resource "aws_redshift_snapshot_schedule" "default" {
+  identifier = "tf-redshift-snapshot-schedule"
+  definitions = [
+    "rate(4 hours)",
+  ]
+}
+
+resource "aws_redshift_snapshot_schedule_association" "default" {
+  cluster_identifier  = aws_redshift_cluster.redshift_cluster.id
+  schedule_identifier = aws_redshift_snapshot_schedule.default.id
+}
