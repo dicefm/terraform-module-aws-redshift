@@ -53,7 +53,7 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   kms_key_id                           = var.kms_key_id
   encrypted                            = var.encrypted
   cluster_parameter_group_name         = var.cluster_parameter_group_name
-  
+
   # Can't do in version 3.31.0
   #apply_immediately                     = var.apply_immediately
   #availability_zone_relocation_enabled = var.availability_zone_relocation_enabled
@@ -101,3 +101,51 @@ resource "aws_redshift_snapshot_schedule_association" "default" {
   cluster_identifier  = aws_redshift_cluster.redshift_cluster.id
   schedule_identifier = aws_redshift_snapshot_schedule.default.id
 }
+
+
+### LoadBalancer
+### We want to give public access to the load balancer
+resource "aws_lb" "nlb_redshift" {
+  name               = "nlb-redshift"
+  internal           = false
+  load_balancer_type = "network"
+  subnets            = ["subnet-xxxxxx", "subnet-yyyyyy"]
+
+  enable_deletion_protection = false
+}
+
+resource "aws_lb_target_group" "redshift_tg" {
+  name     = "redshift-tg"
+  port     = 5439
+  protocol = "TCP"
+  vpc_id   = "vpc-xxxxxx"
+
+  target_type = "ip"
+}
+
+resource "aws_lb_target_group_attachment" "redshift_tg_attachment" {
+  target_group_arn = aws_lb_target_group.redshift_tg.arn
+  target_id        = "redshift-cluster-ip"
+  port             = 5439
+}
+
+resource "aws_lb_listener" "listener" {
+  load_balancer_arn = aws_lb.nlb_redshift.arn
+  port              = "5439"
+  protocol          = "TCP"
+
+  default_action {
+    type             = "forward"
+      target_group_arn = aws_lb_target_group.redshift_tg.arn
+  }
+}
+
+resource "aws_security_group_rule" "allow_nlb" {
+  type              = "ingress"
+  from_port         = 5439
+  to_port           = 5439
+  protocol          = "tcp"
+  security_group_id = "sg-xxxxxxxx"
+  source_security_group_id = aws_lb.nlb_redshift.security_groups[0]
+}
+
