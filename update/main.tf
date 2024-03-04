@@ -40,7 +40,7 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   database_name                        = var.database_name
   port                                 = var.port
   allow_version_upgrade                = var.allow_version_upgrade
-  vpc_security_group_ids               = [ var.security_group ]
+  vpc_security_group_ids               = [ var.security_group, redshift_allowlist_security_group.id ]
   cluster_subnet_group_name            = var.cluster_subnet_group_name
   skip_final_snapshot                  = var.skip_final_snapshot
   snapshot_identifier                  = var.snapshot_identifier
@@ -109,7 +109,7 @@ resource "aws_lb" "nlb_redshift" {
   name               = "nlb-redshift"
   internal           = false
   load_balancer_type = "network"
-  subnets            = ["subnet-xxxxxx", "subnet-yyyyyy"]
+  subnets            = var.private_subnets
 
   enable_deletion_protection = false
 }
@@ -118,14 +118,14 @@ resource "aws_lb_target_group" "redshift_tg" {
   name     = "redshift-tg"
   port     = 5439
   protocol = "TCP"
-  vpc_id   = "vpc-xxxxxx"
+  vpc_id   = var.vpc_id
 
   target_type = "ip"
 }
 
 resource "aws_lb_target_group_attachment" "redshift_tg_attachment" {
   target_group_arn = aws_lb_target_group.redshift_tg.arn
-  target_id        = "redshift-cluster-ip"
+  target_id        = var.leader_node_private_ip
   port             = 5439
 }
 
@@ -140,12 +140,22 @@ resource "aws_lb_listener" "listener" {
   }
 }
 
-resource "aws_security_group_rule" "allow_nlb" {
-  type              = "ingress"
-  from_port         = 5439
-  to_port           = 5439
-  protocol          = "tcp"
-  security_group_id = "sg-xxxxxxxx"
-  source_security_group_id = aws_lb.nlb_redshift.security_groups[0]
-}
+resource "aws_security_group" "redshift_allowlist_security_group" {
+  name        = "redshift_allowlist_security_group"
+  description = "Whitelist Redshift on specific IPs"
+  vpc_id      =  var.vpc_id
 
+  ingress {
+    from_port   = 5439
+      to_port     = 5439
+      protocol    = "tcp"
+      cidr_blocks = var.allowed_ips
+  }
+
+  egress {
+    from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+  }
+}

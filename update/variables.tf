@@ -105,10 +105,23 @@ variable "iam_roles" {
   description = "A list of parameter maps to apply"
   type        = list(map(string))
   default     = []
-}
+ }
 
-variable "tags" {
-  description = "A mapping of tags to assign to the bucket."
-  type        = map(string)
-  default     = {}
-}
+  variable "tags" {
+    description = "A mapping of tags to assign to the bucket."
+    type        = map(string)
+    default     = {}
+  }
+
+  variable  "allowed_ips"{
+    description = "The ips of external resources that can access the cluster"
+    type        = list(string)
+  }
+
+
+  variable "vpc_id" {
+    description = "The ID of the VPC to deploy LB in"
+    type        = string
+  }
+
+
