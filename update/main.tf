@@ -40,7 +40,7 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   database_name                        = var.database_name
   port                                 = var.port
   allow_version_upgrade                = var.allow_version_upgrade
-  vpc_security_group_ids               = [ var.security_group, redshift_allowlist_security_group.id ]
+  vpc_security_group_ids               = [ var.security_group, aws_security_group.redshift_allowlist_security_group.id ]
   cluster_subnet_group_name            = var.cluster_subnet_group_name
   skip_final_snapshot                  = var.skip_final_snapshot
   snapshot_identifier                  = var.snapshot_identifier
