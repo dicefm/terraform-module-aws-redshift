@@ -125,3 +125,9 @@ variable "iam_roles" {
   }
 
 
+  variable "leader_node_private_ip" {
+    description = "The IP of the leader node to allow the LB to connect to"
+    type        = string
+  }
+
+
