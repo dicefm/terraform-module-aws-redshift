@@ -13,3 +13,10 @@ output "redshift_master_password" {
   value       = aws_redshift_cluster.redshift_cluster.master_password
   sensitive   = true
 }
+
+output "loadbalancer_address" {
+  description = "The loadbalancer address"
+  value       = aws_lb.nlb_redshift.dns_name
+}
+
+
