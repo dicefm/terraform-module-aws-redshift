@@ -125,7 +125,7 @@ resource "aws_lb_target_group" "redshift_tg" {
 
 resource "aws_lb_target_group_attachment" "redshift_tg_attachment" {
   target_group_arn = aws_lb_target_group.redshift_tg.arn
-  target_id        = var.leader_node_private_ip
+  target_id        = var.vpc_endpoint_ip
   port             = 5439
 }
 
