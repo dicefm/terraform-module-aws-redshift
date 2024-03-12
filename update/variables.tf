@@ -125,8 +125,8 @@ variable "iam_roles" {
   }
 
 
-  variable "leader_node_private_ip" {
-    description = "The IP of the leader node to allow the LB to connect to"
+  variable "vpc_endpoint_ip" {
+    description = "The IP of the VPC Endpoint of Redshift to allow the LB to connect to"
     type        = string
   }
 
