@@ -129,5 +129,9 @@ variable "iam_roles" {
     description = "The IP of the VPC Endpoint of Redshift to allow the LB to connect to"
     type        = string
   }
-
-
+  
+variable "loadbalancer_private_subnets" {
+  description = "(Optional) Provide a different list of subnets to the LB to use"
+  type = list(string)
+  default = []
+}

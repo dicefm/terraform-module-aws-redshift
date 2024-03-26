@@ -27,6 +27,9 @@ resource "random_password" "password" {
   min_upper        = 1
 }
 
+locals {
+  loadbalancer_private_subnets = length(var.loadbalancer_private_subnets) == 0 ? var.private_subnets : var.loadbalancer_private_subnets
+}
 
 # ###
 # Redshift
@@ -109,7 +112,7 @@ resource "aws_lb" "nlb_redshift" {
   name               = "nlb-redshift"
   internal           = false
   load_balancer_type = "network"
-  subnets            = var.private_subnets
+  subnets            = local.loadbalancer_private_subnets
   security_groups    = [aws_security_group.redshift_allowlist_security_group.id]
 
   enable_deletion_protection = false
