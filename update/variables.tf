@@ -105,10 +105,33 @@ variable "iam_roles" {
   description = "A list of parameter maps to apply"
   type        = list(map(string))
   default     = []
-}
+ }
 
-variable "tags" {
-  description = "A mapping of tags to assign to the bucket."
-  type        = map(string)
-  default     = {}
+  variable "tags" {
+    description = "A mapping of tags to assign to the bucket."
+    type        = map(string)
+    default     = {}
+  }
+
+  variable  "allowed_ips"{
+    description = "The ips of external resources that can access the cluster"
+    type        = list(string)
+  }
+
+
+  variable "vpc_id" {
+    description = "The ID of the VPC to deploy LB in"
+    type        = string
+  }
+
+
+  variable "vpc_endpoint_ip" {
+    description = "The IP of the VPC Endpoint of Redshift to allow the LB to connect to"
+    type        = string
+  }
+  
+variable "loadbalancer_private_subnets" {
+  description = "(Optional) Provide a different list of subnets to the LB to use"
+  type = list(string)
+  default = []
 }
